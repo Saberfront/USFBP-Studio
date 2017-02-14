@@ -1,0 +1,1464 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title> USFBP Studio </title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<script src="lang/blockly_compressed.js"></script>
+<script src="lang/blocks/logic.js"></script>
+<script src="lang/blocks/loops.js"></script>
+<script src="lang/blocks/math.js"></script>
+<script src="lang/blocks/text.js"></script>
+<script src="lang/blocks/lists.js"></script>
+<script src="lang/blocks/colour.js"></script>
+<script src="lang/blocks/variables.js"></script>
+<script src="lang/blocks/procedures.js"></script>
+<script src="lang/generators/lua.js"></script>
+<script src="lang/generators/lua/logic.js"></script>
+<script src="lang/generators/lua/loops.js"></script>
+<script src="lang/generators/lua/math.js"></script>
+<script src="lang/generators/lua/text.js"></script>
+<script src="lang/generators/lua/lists.js"></script>
+<script src="lang/generators/lua/colour.js"></script>
+<script src="lang/generators/lua/variables.js"></script>
+<script src="lang/generators/lua/procedures.js"></script>
+<script src="core/jquery.js"></script>
+<link rel="stylesheet" href="ui/tether.min.css">
+<script src="ui/tether.min.js" ></script>
+<link rel="stylesheet" href="ui/jquery-ui.css">
+<script src="ui/jquery-ui.js" ></script>
+<link rel="stylesheet" href="ui/bootstrap.min.css">
+<script src="ui/bootstrap.min.js" ></script>
+<script src="lang/msg/messages.js"></script>
+
+  <link rel="stylesheet" href="editor/lib/codemirror.css">
+    <link rel="stylesheet" href="editor/theme/blackboard.css">
+
+  <script src="editor/lib/codemirror.js" ></script>
+  <script src="editor/mode/lua/lua.js"></script>
+  <script src="datastorage/storage.js"></script>
+ <script src="editor/addon/search/jump-to-line.js"></script>
+ <script src="editor/addon/edit/closebrackets.js"></script>
+ <script src="editor/addon/search/matchesonscrollbar.js"></script>
+ <script src="editor/addon/fold/foldcode.js"></script>
+ <script src="editor/addon/hint/show-hint.js"></script>
+ <script src="editor/addon/scroll/annotatescrollbar.js"></script>
+  
+<style>
+body{
+	width: 100%;
+	height: 100%;
+}
+ 
+ #blocklyDiv {
+ 	height: 500px;
+ 	width:  1200px;
+ }
+  #blocklyView {
+ 	height: 100%;
+ 	width:  100%;
+ }
+ 
+ .CodeMirror{
+ 	height: 100%;
+ 	width: 100%;
+ }
+ 
+ #lua{
+ 	height: 500px;
+ 	width:  1200px;
+ }
+
+</style>
+</head>
+<body>
+<div class="container-fluid">
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+
+  </div>
+  </nav>
+  <div id="editorStage">
+  <ul>
+    <li><a href="#blockView">Block View</a></li>
+    <li><a href="#lua">Lua View</a></li>
+  </ul>
+  <div id="blockView">
+      <div id="blocklyDiv" ></div>
+
+    </div>
+  <div id="lua">
+     <textarea class="code-editor" id="luaView" ></textarea>
+
+   </div>
+</div>
+
+
+
+
+</div>
+<xml  id="toolbox" style="display: none;">
+<category name="Core">
+  <category name="Logic" colour="#5C81A6">
+    <block type="controls_if"></block>
+    <block type="logic_compare">
+      <field name="OP">EQ</field>
+    </block>
+    <block type="logic_operation">
+      <field name="OP">AND</field>
+    </block>
+    <block type="logic_negate"></block>
+    <block type="logic_boolean">
+      <field name="BOOL">TRUE</field>
+    </block>
+    <block type="logic_null"></block>
+    <block type="logic_ternary"></block>
+  </category>
+  <category name="Loops" colour="#5CA65C">
+    <block type="controls_repeat_ext">
+      <value name="TIMES">
+        <shadow type="math_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="controls_whileUntil">
+      <field name="MODE">WHILE</field>
+    </block>
+    <block type="controls_for">
+      <field name="VAR">i</field>
+      <value name="FROM">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="TO">
+        <shadow type="math_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+      <value name="BY">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="controls_forEach">
+      <field name="VAR">j</field>
+    </block>
+    <block type="controls_flow_statements">
+      <field name="FLOW">BREAK</field>
+    </block>
+  </category>
+  <category name="Math" colour="#5C68A6">
+    <block type="math_round">
+      <field name="OP">ROUND</field>
+      <value name="NUM">
+        <shadow type="math_number">
+          <field name="NUM">3.1</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="srad"></block>
+    <block type="math_number">
+      <field name="NUM">0</field>
+    </block>
+    <block type="math_single">
+      <field name="OP">ROOT</field>
+      <value name="NUM">
+        <shadow type="math_number">
+          <field name="NUM">9</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_trig">
+      <field name="OP">SIN</field>
+      <value name="NUM">
+        <shadow type="math_number">
+          <field name="NUM">45</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_constant">
+      <field name="CONSTANT">PI</field>
+    </block>
+    <block type="math_number_property">
+      <mutation divisor_input="false"></mutation>
+      <field name="PROPERTY">EVEN</field>
+      <value name="NUMBER_TO_CHECK">
+        <shadow type="math_number">
+          <field name="NUM">0</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_arithmetic">
+      <field name="OP">ADD</field>
+      <value name="A">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="B">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_on_list">
+      <mutation op="SUM"></mutation>
+      <field name="OP">SUM</field>
+    </block>
+    <block type="math_modulo">
+      <value name="DIVIDEND">
+        <shadow type="math_number">
+          <field name="NUM">64</field>
+        </shadow>
+      </value>
+      <value name="DIVISOR">
+        <shadow type="math_number">
+          <field name="NUM">10</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_constrain">
+      <value name="VALUE">
+        <shadow type="math_number">
+          <field name="NUM">50</field>
+        </shadow>
+      </value>
+      <value name="LOW">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="HIGH">
+        <shadow type="math_number">
+          <field name="NUM">100</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_random_int">
+      <value name="FROM">
+        <shadow type="math_number">
+          <field name="NUM">1</field>
+        </shadow>
+      </value>
+      <value name="TO">
+        <shadow type="math_number">
+          <field name="NUM">100</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="math_random_float"></block>
+  </category>
+  <category name="Text" colour="#5CA68D">
+    <block type="text_charAt">
+      <mutation at="true"></mutation>
+      <field name="WHERE">FROM_START</field>
+      <value name="VALUE">
+        <block type="variables_get">
+          <field name="VAR">text</field>
+        </block>
+      </value>
+    </block>
+    <block type="text">
+      <field name="TEXT"></field>
+    </block>
+    <block type="text_append">
+      <field name="VAR">item</field>
+      <value name="TEXT">
+        <shadow type="text">
+          <field name="TEXT"></field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_length">
+      <value name="VALUE">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_isEmpty">
+      <value name="VALUE">
+        <shadow type="text">
+          <field name="TEXT"></field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_indexOf">
+      <field name="END">FIRST</field>
+      <value name="VALUE">
+        <block type="variables_get">
+          <field name="VAR">text</field>
+        </block>
+      </value>
+      <value name="FIND">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_join">
+      <mutation items="2"></mutation>
+    </block>
+    <block type="text_getSubstring">
+      <mutation at1="true" at2="true"></mutation>
+      <field name="WHERE1">FROM_START</field>
+      <field name="WHERE2">FROM_START</field>
+      <value name="STRING">
+        <block type="variables_get">
+          <field name="VAR">text</field>
+        </block>
+      </value>
+    </block>
+    <block type="text_changeCase">
+      <field name="CASE">UPPERCASE</field>
+      <value name="TEXT">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_trim">
+      <field name="MODE">BOTH</field>
+      <value name="TEXT">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_print">
+      <value name="TEXT">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="text_prompt_ext">
+      <mutation type="TEXT"></mutation>
+      <field name="TYPE">TEXT</field>
+      <value name="TEXT">
+        <shadow type="text">
+          <field name="TEXT">abc</field>
+        </shadow>
+      </value>
+    </block>
+  </category>
+  <category name="Lists" colour="#745CA6">
+    <block type="lists_indexOf">
+      <field name="END">FIRST</field>
+      <value name="VALUE">
+        <block type="variables_get">
+          <field name="VAR">list</field>
+        </block>
+      </value>
+    </block>
+    <block type="lists_create_with">
+      <mutation items="0"></mutation>
+    </block>
+    <block type="lists_repeat">
+      <value name="NUM">
+        <shadow type="math_number">
+          <field name="NUM">5</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="lists_length"></block>
+    <block type="lists_isEmpty"></block>
+    <block type="lists_create_with">
+      <mutation items="3"></mutation>
+    </block>
+    <block type="lists_getIndex">
+      <mutation statement="false" at="true"></mutation>
+      <field name="MODE">GET</field>
+      <field name="WHERE">FROM_START</field>
+      <value name="VALUE">
+        <block type="variables_get">
+          <field name="VAR">list</field>
+        </block>
+      </value>
+    </block>
+    <block type="lists_setIndex">
+      <mutation at="true"></mutation>
+      <field name="MODE">SET</field>
+      <field name="WHERE">FROM_START</field>
+      <value name="LIST">
+        <block type="variables_get">
+          <field name="VAR">list</field>
+        </block>
+      </value>
+    </block>
+    <block type="lists_getSublist">
+      <mutation at1="true" at2="true"></mutation>
+      <field name="WHERE1">FROM_START</field>
+      <field name="WHERE2">FROM_START</field>
+      <value name="LIST">
+        <block type="variables_get">
+          <field name="VAR">list</field>
+        </block>
+      </value>
+    </block>
+    <block type="lists_split">
+      <mutation mode="SPLIT"></mutation>
+      <field name="MODE">SPLIT</field>
+      <value name="DELIM">
+        <shadow type="text">
+          <field name="TEXT">,</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="lists_sort">
+      <field name="TYPE">NUMERIC</field>
+      <field name="DIRECTION">1</field>
+    </block>
+  </category>
+  <category name="Colour" colour="#A6745C">
+    <block type="colour_picker">
+      <field name="COLOUR">#ff0000</field>
+    </block>
+    <block type="colour_random"></block>
+    <block type="colour_rgb">
+      <value name="RED">
+        <shadow type="math_number">
+          <field name="NUM">100</field>
+        </shadow>
+      </value>
+      <value name="GREEN">
+        <shadow type="math_number">
+          <field name="NUM">50</field>
+        </shadow>
+      </value>
+      <value name="BLUE">
+        <shadow type="math_number">
+          <field name="NUM">0</field>
+        </shadow>
+      </value>
+    </block>
+    <block type="colour_blend">
+      <value name="COLOUR1">
+        <shadow type="colour_picker">
+          <field name="COLOUR">#ff0000</field>
+        </shadow>
+      </value>
+      <value name="COLOUR2">
+        <shadow type="colour_picker">
+          <field name="COLOUR">#3333ff</field>
+        </shadow>
+      </value>
+      <value name="RATIO">
+        <shadow type="math_number">
+          <field name="NUM">0.5</field>
+        </shadow>
+      </value>
+    </block>
+  </category>
+  <sep></sep>
+  <category name="Variables" colour="#935ba5" custom="VARIABLE"></category>
+  <category name="Functions" colour="#9A5CA6" custom="PROCEDURE">
+  	
+  </category>
+  
+  <sep></sep>
+  </category>
+  <category name="USFBP">
+  <category name="Utils">
+    <category name="Advanced Procedures">
+    	<block type="return_statement"></block>
+		<block type="anonymousfunction"></block>
+	    <block type="wait"></block>
+
+	</category>
+	<category name="Welding and Joints">
+      <block type="newweld"></block>
+      <block type="setpart0"></block>
+      <block type="setc0"></block>
+      <block type="setpart1"></block>
+      <block type="c0_of"></block>
+       <block type="c0_of_imp"></block>
+      <block type="weldtype"></block>
+      <block type="getpart0"></block>
+      <block type="setc0imp"></block>
+      <block type="getpart0"></block>
+
+      </category>
+    <category name="Instancing">
+  <category name="General">
+    <block type="setparent"></block>
+    <block type="instance_destroy"></block>
+  </category>
+
+  </category>
+  <category name="Vector3">
+  <block type="vector3_new"></block>
+  <block type="velocity"></block>
+  <block type="velocity_set"></block>
+
+
+  </category>
+    <category name="CFrame">
+  	
+  	<block type="create_cframe_from_values"></block>
+  	<block type="cframe_angles">
+  		<value name="rX"><block type="srad"></block></value>
+  		<value name="rY"><block type="srad"></block></value>
+  		<value name="rZ"><block type="srad"></block></value>
+  	</block>
+  	<block type="cframe_of"></block>
+  	<block type="cframe_vectortoworldspace"></block>
+  	<block type="cframe_to_objectspace"></block>
+
+  </category>
+
+  </category>
+  <category name="USFBP Animations" colour="#5ba55b">
+  <category name="Gun Parts">
+   <category name="Ignore Model">
+   	    <block type="gunignore"></block>
+   	    <block type="arms"></block>
+   </category>
+    <category name="Gun Model">
+   	    <block type="gun_handle"></block>
+   </category>
+    
+  </category>
+  <category name="Mag State">
+  <category name="States">
+  	  <block type="ismagempty"></block>
+  	  <block type="is_new_mag"></block>
+  	  <block type="is_mag_visible"></block>
+     </category>
+     <category name="Mag Table">
+        <block type="originalmagobjectspacecframe"></block>
+        <block type="getmagclone"></block>
+        <block type="getmag"></block>
+     </category>
+     <category name="Mag Actions">
+         <block type="declaremag"></block>
+   	     <block type="makemaginvisible"></block>
+
+     </category>
+  </category>
+  <category name="Animator Module">
+    <block type="alpha"></block>
+    <block type="tween_joint"></block>
+   <block type="setupreload"></block>
+  </category>
+  
+  <category name="Speed Vars">
+
+  	<block type="getemptyreloadtime"></block>
+  	<block type="getloadedreloadtime"></block>
+  </category>
+
+  
+  
+  </category>
+  <category name="USFBP Settings" colour="#5ba55b"></category>
+  <category name="USFBP Plugins" colour="#5ba55b"></category>
+  </category>
+</xml>
+<xml xmlns="http://www.w3.org/1999/xhtml" id="workspaceBlocks" style="display:none">
+	
+
+</xml>
+<script type="text/javascript">
+	
+Blockly.Blocks['create_cframe_from_values'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Create CFrame from Values");
+    this.appendValueInput("X")
+        .setCheck("Number")
+        .appendField("CFrame.x");
+    this.appendValueInput("Y")
+        .setCheck("Number")
+        .appendField("CFrame.y");
+    this.appendValueInput("Z")
+        .setCheck("Number")
+        .appendField("CFrame.z");
+    this.setOutput(true, "CFrame");
+    this.setColour(230);
+    this.setTooltip('Same as S.CF(x,y,z)  and the same as CFrame.new(x,y,z).');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['getemptyreloadtime'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Empty Reload Speed");
+    this.setOutput(true, "Number");
+    this.setColour(230);
+    this.setTooltip('return the speed at which an empty mag is reloaded.');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['ismagempty'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Magazine is Empty?");
+    this.setOutput(true, "Boolean");
+    this.setColour(230);
+    this.setTooltip('returns whether or not the mag of a blaster is empty.');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['getloadedreloadtime'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Loaded Mag Reload Speed");
+    this.setOutput(true, "Number");
+    this.setColour(230);
+    this.setTooltip('returns the speed at which a loaded mag can be animated.');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['is_new_mag'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("New Magazine?");
+    this.setOutput(true, "Boolean");
+    this.setColour(230);
+    this.setTooltip('returns whether or not the mag is new.');
+    this.setHelpUrl('');
+  }
+}; 
+Blockly.Blocks['declaremag'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Setup Mag");
+    this.appendValueInput("MagName")
+        .setCheck("String")
+        .appendField("Mag Name");
+    this.appendDummyInput()
+        .appendField("save to")
+        .appendField(new Blockly.FieldVariable("item"), "magPart")
+        .appendField("and")
+        .appendField(new Blockly.FieldVariable("item"), "magTable");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip('assigns a mag and a magTable to the specified variables.');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['setparent'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("set Parent of ")
+        .appendField(new Blockly.FieldVariable("item"), "instanceVar");
+    this.appendValueInput("instance")
+        .setCheck("Instance")
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField("to");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip('same as item.Parent =  Instance');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['gunignore'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Gun Ignore");
+    this.setOutput(true, ["Instance", "Model"]);
+    this.setColour(230);
+    this.setTooltip('returns the gunignore model for the current player.');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['newweld'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Create Weld");
+    this.setOutput(true, ["Instance", "JointInstance", "Weld"]);
+    this.setColour(230);
+    this.setTooltip('same as Instance.new("Weld")');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['is_mag_visible'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Mag is Visible");
+    this.setOutput(true, "Boolean");
+    this.setColour(230);
+    this.setTooltip('returns whether or not the mag is opaque (completely visible)');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['originalmagobjectspacecframe'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(" get ObjectSpace CFrame for original mag ")
+        .appendField("Mag Table")
+        .appendField(new Blockly.FieldVariable("magTable1"), "magTable");
+    this.appendValueInput("MagIndex")
+        .setCheck("Number")
+        .appendField("Index");
+    this.appendValueInput("OSpaceCFrame")
+        .setCheck("CFrame")
+        .appendField("with CFrame");
+    this.setInputsInline(true);
+    this.setOutput(true, "CFrame");
+    this.setColour(230);
+    this.setTooltip('same as magTable1[Index].Original.CFrame:ToObjectSpace(OSpaceCFrame)');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['getmagclone'] = {
+  init: function() {
+    this.appendValueInput("Index")
+        .setCheck("Number")
+        .appendField("Get magClone with index");
+    this.appendValueInput("magTable")
+        .setCheck("Array")
+        .appendField("from");
+    this.setInputsInline(true);
+    this.setOutput(true, ["Instance", "BasePart"]);
+    this.setColour(230);
+    this.setTooltip('same as magTable[Index].magClone');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['setpart0'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Set ")
+        .appendField(new Blockly.FieldVariable("item"), "Weld")
+        .appendField("'s Part0 to ");
+    this.appendValueInput("Part")
+        .setCheck("BasePart")
+        .appendField("BasePart");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip('Sets the Part0 property of the specified weld to BasePart part.');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['setpart1'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Set ")
+        .appendField(new Blockly.FieldVariable("item"), "Weld")
+        .appendField("'s Part1 to ");
+    this.appendValueInput("Part")
+        .setCheck("BasePart")
+        .appendField("BasePart");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip('same as Weld.Part1 = Part');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['gun_handle'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Gun Handle");
+    this.setOutput(true, ["BasePart", "Instance"]);
+    this.setColour(230);
+    this.setTooltip('returns the handle BasePart of the Gun');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['srad'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Radians")
+        .appendField(new Blockly.FieldAngle(90), "Angle");
+    this.setOutput(true, "Number");
+    this.setColour(230);
+    this.setTooltip('same as S.RAD(Angle) or math.rad(angle)');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['weldtype'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Use Weld Type")
+        .appendField(new Blockly.FieldDropdown([["Right Arm Weld","RWeld"], ["Left Arm Weld","LWeld"], ["Grip Weld","Grip"]]), "WeldType");
+    this.setInputsInline(true);
+    this.setOutput(true, ["Instance", "JointInstance", "Weld"]);
+    this.setColour(230);
+    this.setTooltip('Same as S.LWeld,S.RWeld , or S.Grip depending on the chosen weld type.');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['alpha'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Alpha of Type")
+        .appendField(new Blockly.FieldDropdown([["Linear","Linear"], ["Sine","Sine"]]), "AlphaType");
+    this.setInputsInline(true);
+    this.setOutput(true, "Function");
+    this.setColour(230);
+    this.setTooltip('S.Sine or S.Linear Depending on the option chosen');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['cframe_angles'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Rotate To");
+    this.appendValueInput("rX")
+        .setCheck("Number")
+        .appendField("X");
+    this.appendValueInput("rY")
+        .setCheck("Number")
+        .appendField("Y");
+    this.appendValueInput("rZ")
+        .setCheck("Number")
+        .appendField("Z");
+    this.setInputsInline(true);
+    this.setOutput(true, "CFrame");
+    this.setColour(230);
+    this.setTooltip('Same as S.CFANG(rX,rY,rZ) or CFrame.Angles');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['cframe_of'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("CFrame of");
+    this.appendValueInput("Part")
+        .setCheck("BasePart");
+    this.setInputsInline(true);
+    this.setOutput(true, "CFrame");
+    this.setColour(230);
+    this.setTooltip('returns the CFrame of the specified part.');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['c0_of'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("C0 of Weld")
+        .appendField(new Blockly.FieldVariable("item"), "Weld");
+    this.setOutput(true, "CFrame");
+    this.setColour(230);
+    this.setTooltip('same as Weld.C0');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['c0_of_imp'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("C0 of Weld");
+    this.appendValueInput("Weld")
+        .setCheck("Weld");
+    this.setOutput(true, "CFrame");
+    this.setColour(230);
+    this.setTooltip('same as Weld.C0');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['setc0'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Set the C0 of Weld")
+        .appendField(new Blockly.FieldVariable("item"), "Weld")
+        .appendField("To");
+    this.appendValueInput("CFrame")
+        .setCheck("CFrame")
+        .appendField("CFrame");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip('same as Weld.C0 = CFrame');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['setc0imp'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Set the C0 of Weld");
+       this.appendValueInput("Weld")
+        .setCheck("Weld"); 
+    this.appendValueInput("CFrame")
+        .setCheck("CFrame")
+        .appendField("CFrame");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip('same as Weld.C0 = CFrame');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['tween_joint'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Tween Joint");
+    this.appendValueInput("Joint")
+        .setCheck("JointInstance")
+        .appendField("Joint");
+    this.appendValueInput("C0")
+        .setCheck("CFrame")
+        .appendField("New C0");
+    this.appendValueInput("C1")
+        .setCheck("CFrame")
+        .appendField("New C1");
+    this.appendValueInput("Alpha")
+        .setCheck("Function")
+        .appendField("Alpha");
+    this.appendValueInput("Duration")
+        .setCheck("Number")
+        .appendField("Duration");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip('Same as S.tweenJoint(Joint,C0,C1,Alpha,Duration)');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['wait'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Wait");
+    this.appendValueInput("Duration")
+        .setCheck("Number");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip('same as wait(duration)');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['anonymousfunction'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Anonymous Function");
+    this.appendStatementInput("code")
+        .setCheck(null);
+    this.setOutput(true, "Function");
+    this.setColour(230);
+    this.setTooltip('creates an anonymous function');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['setupreload'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("On Reload");
+    this.appendStatementInput("code")
+        .appendField("do");
+    this.setColour(330);
+    this.setTooltip('Sets the Reload function for use with the Reloading Animator for a blaster');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['return_statement'] = {
+  init: function() {
+    this.appendValueInput("Value")
+        .setCheck(null)
+        .appendField("return value");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setColour(300);
+    this.setTooltip('returns a value');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['makemaginvisible'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Hide Mag");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip('Makes the current magazine invisible.');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['instance_destroy'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Destroy Object");
+    this.appendValueInput("Instance")
+        .setCheck("Instance");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip('Same as Instance:Destroy()');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['getmag'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Get mag");
+    this.appendValueInput("magName")
+        .setCheck("String")
+        .appendField("with mag name");
+    this.appendDummyInput()
+        .appendField("save to")
+        .appendField(new Blockly.FieldVariable("item"), "magPart")
+        .appendField("and")
+        .appendField(new Blockly.FieldVariable("item"), "magTable");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip('returns a mag from the specified mag table with a specified name.');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['vector3_new'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Coordinates:")
+        .appendField("X")
+        .appendField(new Blockly.FieldNumber(10), "X")
+        .appendField("Y")
+        .appendField(new Blockly.FieldNumber(20), "Y")
+        .appendField("Z")
+        .appendField(new Blockly.FieldNumber(30), "Z");
+    this.setInputsInline(true);
+    this.setOutput(true, "Vector3");
+    this.setColour(230);
+    this.setTooltip('Creates a new Vector3');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['velocity'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Velocity of Part: ");
+    this.appendValueInput("Part")
+        .setCheck("BasePart");
+    this.setInputsInline(true);
+    this.setOutput(true, "Vector3");
+    this.setColour(230);
+    this.setTooltip('returns the velocity of a specified part.');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['velocity_set'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Set");
+    this.appendValueInput("Velocity")
+        .setCheck("Vector3")
+        .appendField("Velocity");
+    this.appendValueInput("newVelocity")
+        .setCheck("Vector3")
+        .appendField("to Vector3");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip('Sets the specified Velocity to a specified Vector3 value');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['cframe_vectortoworldspace'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Get Global CFrame Coordinates");
+    this.appendValueInput("CFrame")
+        .setCheck("CFrame")
+        .appendField("From CFrame");
+    this.appendValueInput("Vector")
+        .setCheck("Vector3")
+        .appendField("With Vector3");
+    this.setInputsInline(true);
+    this.setOutput(true, "Vector3");
+    this.setColour(230);
+    this.setTooltip('same as CFrame:vectorToWorldSpace(Vector)');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['getpart0'] = {
+  init: function() {
+    this.appendValueInput("Weld")
+        .setCheck("Weld")
+        .appendField("Get Part0 of Weld ");
+    this.setInputsInline(true);
+    this.setOutput(true, "BasePart");
+    this.setColour(230);
+    this.setTooltip('return the Part0 property of a weld.');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['cframe_to_objectspace'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Convert CFrame");
+    this.appendValueInput("CF")
+        .setCheck("CFrame");
+    this.appendDummyInput()
+        .appendField("to object space using CFrame");
+    this.appendValueInput("CFrame")
+        .setCheck("CFrame");
+    this.setInputsInline(true);
+    this.setOutput(true, "CFrame");
+    this.setColour(230);
+    this.setTooltip('same as CF:toObjectSpace(CFrame)');
+    this.setHelpUrl('');
+  }
+};
+Blockly.Blocks['arms'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Use Arm:")
+        .appendField(new Blockly.FieldDropdown([["Left Arm","LArm"], ["Right Arm","RArm"]]), "armType");
+    this.setInputsInline(true);
+    this.setOutput(true, "BasePart");
+    this.setColour(230);
+    this.setTooltip('same as S.RArm or S.LArm depending on the dropdown');
+    this.setHelpUrl('');
+  }
+};
+// Code Generation
+
+Blockly.Lua['create_cframe_from_values'] = function(block) {
+  var value_x = Blockly.Lua.valueToCode(block, 'X', Blockly.Lua.ORDER_ATOMIC);
+  var value_y = Blockly.Lua.valueToCode(block, 'Y', Blockly.Lua.ORDER_ATOMIC);
+  var value_z = Blockly.Lua.valueToCode(block, 'Z', Blockly.Lua.ORDER_ATOMIC);
+  // TODO: Assemble Lua into code variable.
+  var code = 'S.CF(' + value_x + ',' + value_y + ',' + value_z + ')';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['getemptyreloadtime'] = function(block) {
+  // TODO: Assemble Lua into code variable.
+  var code = 'S.reloadTimeEmpty / 1.3';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['ismagempty'] = function(block) {
+  // TODO: Assemble Lua into code variable.
+  var code = 'S.isMagEmpty()';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['getloadedreloadtime'] = function(block) {
+  // TODO: Assemble Lua into code variable.
+  var code = 'S.reloadTimeLoaded / 0.9';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['is_new_mag'] = function(block) {
+  // TODO: Assemble Lua into code variable.
+  var code = 'S.isNewMag()';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['declaremag'] = function(block) {
+var value_magname = Blockly.Lua.valueToCode(block, 'MagName', Blockly.Lua.ORDER_ATOMIC);
+  var variable_magpart = Blockly.Lua.variableDB_.getName(block.getFieldValue('magPart'), Blockly.Variables.NAME_TYPE);
+  var variable_magtable = Blockly.Lua.variableDB_.getName(block.getFieldValue('magTable'), Blockly.Variables.NAME_TYPE);
+   // TODO: Assemble Lua into code variable.
+
+  var code = variable_magpart + ',' + variable_magtable + ' = S.createMag(' + value_magname + ')\n';
+  return code;
+};
+Blockly.Lua['setparent'] = function(block) {
+  var variable_instancevar = Blockly.Lua.variableDB_.getName(block.getFieldValue('instanceVar'), Blockly.Variables.NAME_TYPE);
+  var value_instance = Blockly.Lua.valueToCode(block, 'instance', Blockly.Lua.ORDER_ATOMIC);
+  // TODO: Assemble Lua into code variable.
+  var code = variable_instancevar + '.Parent = ' + value_instance + ' \n';
+  return code;
+};
+Blockly.Lua['gunignore'] = function(block) {
+  // TODO: Assemble Lua into code variable.
+  var code = 'S.gunIgnore';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['newweld'] = function(block) {
+  // TODO: Assemble Lua into code variable.
+  var code = 'Instance.new("Weld")';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['is_mag_visible'] = function(block) {
+  // TODO: Assemble Lua into code variable.
+  var code = 'S.isMagVisible()';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['originalmagobjectspacecframe'] = function(block) {
+  var variable_magtable = Blockly.Lua.variableDB_.getName(block.getFieldValue('magTable'), Blockly.Variables.NAME_TYPE);
+  var value_magindex = Blockly.Lua.valueToCode(block, 'MagIndex', Blockly.Lua.ORDER_ATOMIC);
+  var value_ospacecframe = Blockly.Lua.valueToCode(block, 'OSpaceCFrame', Blockly.Lua.ORDER_ATOMIC);
+  // TODO: Assemble Lua into code variable.
+  var code = variable_magtable + '[' + value_magindex + '].Original.CFrame:toObjectSpace(' + value_ospacecframe + ')\n';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['getmagclone'] = function(block) {
+  var value_index = Blockly.Lua.valueToCode(block, 'Index', Blockly.Lua.ORDER_ATOMIC);
+  var value_magtable = Blockly.Lua.valueToCode(block, 'magTable', Blockly.Lua.ORDER_ATOMIC);
+  // TODO: Assemble Lua into code variable.
+  var code = value_magtable + '[' + value_index + '].magClone';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['setpart0'] = function(block) {
+  var variable_weld = Blockly.Lua.variableDB_.getName(block.getFieldValue('Weld'), Blockly.Variables.NAME_TYPE);
+  var value_part = Blockly.Lua.valueToCode(block, 'Part', Blockly.Lua.ORDER_ATOMIC);
+  // TODO: Assemble Lua into code variable.
+  var code = variable_weld + '.Part0 = ' + value_part + '\n';
+  return code;
+};
+Blockly.Lua['setpart1'] = function(block) {
+  var variable_weld = Blockly.Lua.variableDB_.getName(block.getFieldValue('Weld'), Blockly.Variables.NAME_TYPE);
+  var value_part = Blockly.Lua.valueToCode(block, 'Part', Blockly.Lua.ORDER_ATOMIC);
+  // TODO: Assemble Lua into code variable.
+  var code = variable_weld + '.Part1 = ' + value_part + '\n';
+  return code;
+};
+Blockly.Lua['gun_handle'] = function(block) {
+  // TODO: Assemble Lua into code variable.
+  var code = 'S.Handle';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_ATOMIC]
+};
+
+Blockly.Lua['srad'] = function(block) {
+  var angle_angle = block.getFieldValue('Angle');
+  // TODO: Assemble Lua into code variable.
+  var code = 'S.RAD(' + angle_angle + ')';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['alpha'] = function(block) {
+  var dropdown_alphatype = block.getFieldValue('AlphaType');
+  // TODO: Assemble Lua into code variable.
+  var code = 'S.' + dropdown_alphatype;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['cframe_angles'] = function(block) {
+  var value_rx = Blockly.Lua.valueToCode(block, 'rX', Blockly.Lua.ORDER_ATOMIC);
+  var value_ry = Blockly.Lua.valueToCode(block, 'rY', Blockly.Lua.ORDER_ATOMIC);
+  var value_rz = Blockly.Lua.valueToCode(block, 'rZ', Blockly.Lua.ORDER_ATOMIC);
+  // TODO: Assemble Lua into code variable.
+  var code = 'S.CFANG(' + value_rx + ',' + value_ry + ',' + value_rz + ')';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['cframe_of'] = function(block) {
+  var value_part = Blockly.Lua.valueToCode(block, 'Part', Blockly.Lua.ORDER_MEMBER);
+  // TODO: Assemble Lua into code variable.
+  var code = value_part + '.CFrame';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code,Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['c0_of'] = function(block) {
+  var variable_weld = Blockly.Lua.variableDB_.getName(block.getFieldValue('Weld'), Blockly.Variables.NAME_TYPE);
+  // TODO: Assemble Lua into code variable.
+  var code = variable_weld + '.C0';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return code;
+};
+Blockly.Lua['c0_of_imp'] = function(block) {
+  var value_weld = Blockly.Lua.valueToCode(block,'Weld', Blockly.Lua.ORDER_ATOMIC);
+  // TODO: Assemble Lua into code variable.
+  var code = value_weld + '.C0';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code,Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['setc0'] = function(block) {
+  var variable_weld = Blockly.Lua.variableDB_.getName(block.getFieldValue('Weld'), Blockly.Variables.NAME_TYPE);
+  var value_cframe = Blockly.Lua.valueToCode(block, 'CFrame', Blockly.Lua.ORDER_ATOMIC);
+  // TODO: Assemble Lua into code variable.
+  var code = variable_weld + '.C0 = ' + value_cframe+ "\n";
+  return code;
+};
+Blockly.Lua['setc0imp'] = function(block) {
+  var value_weld = Blockly.Lua.valueToCode(block, "Weld", Blockly.Lua.ORDER_ATOMIC);
+  var value_cframe = Blockly.Lua.valueToCode(block, 'CFrame', Blockly.Lua.ORDER_ATOMIC);
+  // TODO: Assemble Lua into code variable.
+  var code = value_weld + '.C0 = ' + value_cframe+ "\n";
+  return code;
+};
+Blockly.Lua['weldtype'] = function(block) {
+  var dropdown_weldtype = block.getFieldValue('WeldType');
+  // TODO: Assemble Lua into code variable.
+  var code = 'S.' + dropdown_weldtype;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_MEMBER];
+};
+Blockly.Lua['tween_joint'] = function(block) {
+  var value_joint = Blockly.Lua.valueToCode(block, 'Joint', Blockly.Lua.ORDER_ATOMIC);
+  var value_c0 = Blockly.Lua.valueToCode(block, 'C0', Blockly.Lua.ORDER_ATOMIC);
+  var value_c1 = Blockly.Lua.valueToCode(block, 'C1', Blockly.Lua.ORDER_ATOMIC);
+  var value_alpha = Blockly.Lua.valueToCode(block, 'Alpha', Blockly.Lua.ORDER_ATOMIC);
+  var value_duration = Blockly.Lua.valueToCode(block, 'Duration', Blockly.Lua.ORDER_ATOMIC);
+  // TODO: Assemble Lua into code variable.
+  var code = 'S.tweenJoint(' + value_joint + ',' + value_c0 + ',' + value_c1 +  ','  + value_alpha + ',' + value_duration + ' )\n';
+  return code;
+};
+Blockly.Lua['wait'] = function(block) {
+  var value_duration = Blockly.Lua.valueToCode(block, 'Duration', Blockly.Lua.ORDER_ATOMIC);
+  // TODO: Assemble Lua into code variable.
+  var code = 'wait(' + value_duration + ')\n';
+  return code;
+};
+Blockly.Lua['anonymousfunction'] = function(block) {
+  var statements_code = Blockly.Lua.statementToCode(block, 'code');
+  // TODO: Assemble Lua into code variable.
+  var code = 'function() \n ' + statements_code + 'end';
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['setupreload'] = function(block) {
+  var statements_code = Blockly.Lua.statementToCode(block, 'code');
+  // TODO: Assemble Lua into code variable.
+  var code = 'Reload = function(S)\n ' + statements_code +  '\n  end';
+  return code;
+};
+Blockly.Lua['return_statement'] = function(block) {
+  var value_value = Blockly.Lua.valueToCode(block, 'Value', Blockly.Lua.ORDER_ATOMIC);
+  // TODO: Assemble Lua into code variable.
+  var code = 'return ' + value_value + ' \n';
+  return code;
+};
+Blockly.Lua['makemaginvisible'] = function(block) {
+  // TODO: Assemble Lua into code variable.
+  var code = 'S.makeMagInvisible() \n';
+  return code;
+};
+Blockly.Lua['instance_destroy'] = function(block) {
+  var value_instance = Blockly.Lua.valueToCode(block, 'Instance', Blockly.Lua.ORDER_ATOMIC);
+  // TODO: Assemble Lua into code variable.
+  var code = value_instance + ':Destroy() \n';
+  return code;
+};
+Blockly.Lua['getmag'] = function(block) {
+var value_magname = Blockly.Lua.valueToCode(block, 'magName', Blockly.Lua.ORDER_ATOMIC);
+  var variable_magpart = Blockly.Lua.variableDB_.getName(block.getFieldValue('magPart'), Blockly.Variables.NAME_TYPE);
+  var variable_magtable = Blockly.Lua.variableDB_.getName(block.getFieldValue('magTable'), Blockly.Variables.NAME_TYPE);
+    // TODO: Assemble Lua into code variable.
+  var code = variable_magpart + ',' + variable_magtable + ' = S.getMag(' + value_magname + ') \n';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return code;
+};
+Blockly.Lua['vector3_new'] = function(block) {
+  var number_x = block.getFieldValue('X');
+  var number_y = block.getFieldValue('Y');
+  var number_z = block.getFieldValue('Z');
+  // TODO: Assemble Lua into code variable.
+  var code = 'S.V3(' + number_x + ',' + number_y + ',' + number_z + ')';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['velocity'] = function(block) {
+  var value_part = Blockly.Lua.valueToCode(block, 'Part', Blockly.Lua.ORDER_ATOMIC);
+  // TODO: Assemble Lua into code variable.
+  var code = value_part + '.Velocity';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['velocity_set'] = function(block) {
+  var value_velocity = Blockly.Lua.valueToCode(block, 'Velocity', Blockly.Lua.ORDER_ATOMIC);
+  var value_newvelocity = Blockly.Lua.valueToCode(block, 'newVelocity', Blockly.Lua.ORDER_ATOMIC);
+  // TODO: Assemble Lua into code variable.
+  var code = value_velocity + ' = ' + value_newvelocity + '\n';
+  return code;
+};
+Blockly.Lua['cframe_vectortoworldspace'] = function(block) {
+  var value_cframe = Blockly.Lua.valueToCode(block, 'CFrame', Blockly.Lua.ORDER_ATOMIC);
+  var value_vector = Blockly.Lua.valueToCode(block, 'Vector', Blockly.Lua.ORDER_ATOMIC);
+  // TODO: Assemble Lua into code variable.
+  var code = value_cframe + ':vectorToWorldSpace(' + value_vector + ')\n';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['getpart0'] = function(block) {
+  var value_weld = Blockly.Lua.valueToCode(block, 'Weld', Blockly.Lua.ORDER_ATOMIC);
+  // TODO: Assemble Lua into code variable.
+  var code = value_weld + ".Part0";
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['cframe_to_objectspace'] = function(block) {
+  var value_cf = Blockly.Lua.valueToCode(block, 'CF', Blockly.Lua.ORDER_ATOMIC);
+  var value_cframe = Blockly.Lua.valueToCode(block, 'CFrame', Blockly.Lua.ORDER_ATOMIC);
+  // TODO: Assemble Lua into code variable.
+  var code = value_cf + ':toObjectSpace(' + value_cframe + ')';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+Blockly.Lua['arms'] = function(block) {
+  var dropdown_armtype = block.getFieldValue('armType');
+  // TODO: Assemble Lua into code variable.
+  var code = 'S.' + dropdown_armtype;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.Lua.ORDER_ATOMIC];
+};
+</script>
+<script>
+var toolbox = document.getElementById("toolbox");
+
+var options = { 
+	toolbox : toolbox, 
+	collapse : true, 
+	comments : true, 
+	disable : true, 
+	maxBlocks : Infinity, 
+	trashcan : true, 
+	horizontalLayout : true, 
+	toolboxPosition : 'end', 
+	css : true, 
+	media : 'https://blockly-demo.appspot.com/static/media/', 
+	rtl : false, 
+	scrollbars : true, 
+	sounds : true, 
+	oneBasedIndex : true, 
+	grid : {
+		spacing : 20, 
+		length : 1, 
+		colour : '#888', 
+		snap : true
+	}, 
+	zoom : {
+		controls : true, 
+		wheel : true, 
+		startScale : 1.2, 
+		maxcale : 3, 
+		minScale : 0.3
+	}
+};
+
+/* Inject your workspace */ 
+var workspace = Blockly.inject('blocklyDiv', options);
+
+/* Load Workspace Blocks from XML to workspace. Remove all code below if no blocks to load */
+
+/* TODO: Change workspace blocks XML ID if necessary. Can export workspace blocks XML from Workspace Factory. */
+var workspaceBlocks = document.getElementById("workspaceBlocks"); 
+
+/* Load blocks to workspace. */
+Blockly.Xml.domToWorkspace(workspaceBlocks, workspace);
+window.setTimeout(BlocklyStorage.restoreBlocks, 0);
+// Render Code Editor
+ var editor = CodeMirror.fromTextArea(document.getElementById("luaView"), {
+    lineNumbers: true,
+    theme: "blackboard",
+    autoCloseBrackets: true,
+  });
+    function myUpdateFunction(event) {
+  var code = Blockly.Lua.workspaceToCode(workspace);
+  editor.setValue(code);
+}
+$("#editorStage").tabs();
+workspace.addChangeListener(myUpdateFunction);
+BlocklyStorage.backupOnUnload();
+</script>
+</div>
+</body>
+</html>
